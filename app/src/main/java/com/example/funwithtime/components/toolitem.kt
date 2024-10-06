@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -30,12 +31,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight.Companion.SemiBold
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.funwithtime.lastclicked
 import kotlinx.coroutines.*
+import java.sql.Statement
 import kotlin.math.floor
+
 
 suspend fun getTimestampInSeconds(timeMax: Long, onUpdate: (String) -> Unit) {
     while (true) {
@@ -57,7 +61,6 @@ suspend fun getTimestampInSeconds(timeMax: Long, onUpdate: (String) -> Unit) {
     }
 }
 
-@Preview
 @Composable
 fun CarouselCard(
     label : Int = 1
@@ -143,12 +146,13 @@ fun TimerCard(
         }
 }
 
+@Preview
 @Composable
 fun ToolItem(
-    title: String = "Title",
+    day: String = "01",
+    title: String = "Bebop",
     description: String = "Description",
-    id: Int,
-    onClick: () -> Unit,
+    onClick: () -> Unit = {},
 
     ) {
     Card(
@@ -156,41 +160,47 @@ fun ToolItem(
         shape = shapes.extraLarge,
         modifier = Modifier
             .padding(horizontal = 18.dp, vertical = 5.dp)
-            .fillMaxWidth(),
-
+            .fillMaxWidth()
+            .clip(shapes.extraLarge)
+            .clickable(
+                enabled = true,
+                onClick = {
+                    onClick()
+                    lastclicked = day.toInt()-1
+                }
+            ),
     ) {
 
-        Box(
-            modifier = Modifier
-                .clip(shapes.extraLarge)
-                .clickable(enabled = true, onClick = onClick),
-        ) {
-            Column(
-                modifier = Modifier.padding(horizontal = 22.dp, vertical = 18.dp)
-            ) {
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    Box(
-                        modifier = Modifier
-                            .padding(end = 10.dp, bottom = 6.dp)
-                            .weight(1f, true)
-                    ) {
+            Row(
+                modifier = Modifier.padding(horizontal = 22.dp, vertical = 18.dp),
+                ){
+                Surface(
+                    shape = RoundedCornerShape(24.dp),
+                    color = colorScheme.primary,
+                    modifier = Modifier
+                        .width(100.dp)
+                        .height(100.dp),
+                ) {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         Text(
-                            text = title,
-                            style = typography.headlineSmall,
+                            text = day,
+                            style = typography.headlineLarge,
+                            textAlign = TextAlign.Center,
                         )
                     }
                 }
-                Row(
-                    modifier = Modifier
-                        .clip(shapes.extraSmall),
-                    verticalAlignment = Alignment.CenterVertically
+                Column(
+                    modifier = Modifier.padding(horizontal = 22.dp, vertical = 18.dp)
                 ) {
                     Text(
+                        text = title,
+                        style = typography.headlineSmall
+                    )
+                    Text(
                         text = description,
-                        style = typography.bodyMedium,
+                        style = typography.bodyMedium
                     )
                 }
-            }
         }
     }
 }

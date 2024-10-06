@@ -49,7 +49,7 @@ fun HomeScreen() {
                     Modifier
                         .padding(top = 65.dp)
                 ) {
-                    TimerCard("Nächster Kram", 1755281101)
+                    TimerCard("Nächster Krams", 1755281101)
 
                     HorizontalDivider(color = MaterialTheme.colorScheme.secondary, thickness = 2.dp, modifier = Modifier.padding(horizontal = 18.dp))
 

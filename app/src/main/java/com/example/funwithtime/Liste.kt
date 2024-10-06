@@ -97,7 +97,6 @@ val items =
 
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview
 @Composable
 fun HorizontalMultiBrowseCarouselSample() {
     HorizontalMultiBrowseCarousel(
@@ -160,7 +159,7 @@ fun ToolsScreen() {
 
             var j = 1
             while (j <= items.size) {
-                ToolItem("Tag Nr.$j", "???", j) { showBottomSheet = true;}
+                ToolItem("$j", "Tag Nr.$j", "???") { showBottomSheet = true; lastclicked = j.toInt()-2}
                 j++
             }
         }
@@ -171,6 +170,12 @@ fun ToolsScreen() {
                 },
                 sheetState = sheetState
             ) {
+                Image(
+                    modifier = Modifier,
+                    painter = painterResource(id = items[lastclicked].imageResId),
+                    contentDescription = items[lastclicked].day,
+                    contentScale = ContentScale.Fit
+                )
                 Text(
                     textAlign = TextAlign.Center,
                     text = "${items[lastclicked].day}.12.2024",
